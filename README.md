@@ -36,7 +36,7 @@ SLEEP_BETWEEN_WRITES= 1.0       # polite throttle (sec)
 
 ONTOLOGY_CLASS_QID  = "Q1"      # item = "Ontology class"
 CLASS_MEMBERSHIP_PID= "P1"      # property = "instance of ontology class"
-
+```
 ## Runtime tips
 **Dry‑run workflow** : run once with `DRY_RUN=True` for a preview, then flip to `False` to commit.
 - **Bot flag** → `WikibaseIntegrator(..., is_bot=True)` (higher maxlag).
