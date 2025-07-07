@@ -1,0 +1,18 @@
+{
+  "has data format specification": "P2",
+  "has data item": "P3",
+  "has data model": "P4",
+  "has interchange format": "P5",
+  "has process": "P6",
+  "has software": "P7",
+  "mentions": "P8",
+  "hasFollowingStep": "P9",
+  "part of": "P10",
+  "hasVModelStep": "P11",
+  "hasPrecedingStep": "P12",
+  "has part(s)": "P13",
+  "hasCorrespondingStep": "P14",
+  "source": "P18",
+  "wikidata_uri": "P16",
+  "orkg_id": "P17"
+}
