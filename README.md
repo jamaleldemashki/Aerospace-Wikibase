@@ -53,7 +53,10 @@ All properties must exist manually in the Wikibase instance and are mapped expli
        "orkg_id": "P1",
        ...
    }
-PREDICATE_TO_PROPSKEY = {
-    # "has_data_model": "has_data_model",
-    # "has_process": "has_process",
-}
+2. A predicate-to-property mapping for OWL object properties:
+   ```python
+    PREDICATE_TO_PROPSKEY = {
+        # "has_data_model": "has_data_model",
+        # "has_process": "has_process",
+    }
+Only predicates listed in PREDICATE_TO_PROPSKEY are turned into Wikibase statements.
