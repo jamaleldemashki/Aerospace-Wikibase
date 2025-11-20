@@ -1,39 +1,59 @@
-🧠 OWL → Wikibase Importer
-
+# OWL → Wikibase Importer  
 A Python-based pipeline for transforming OWL ontologies into structured Wikibase knowledge graphs.
 
-Overview
+## Overview
 
-This repository provides a complete importer that reads an OWL/RDF ontology and maps its classes, individuals, and selected object properties into a Wikibase instance.
-It preserves the semantic structure of the source ontology, ensures duplicate-free item creation, and enriches Wikibase with labels, aliases, descriptions, and external identifiers.
+This repository provides an importer that reads an OWL/RDF ontology and maps its classes, individuals, and selected object properties into a Wikibase instance.  
+It preserves the semantic structure of the source ontology, avoids duplicate items via ontology IRIs, and enriches Wikibase with labels, aliases, descriptions, and external identifiers.
 
-The importer is suitable for research knowledge graphs, semantic web projects, scientific knowledge bases, and environments where ontologies must be transformed into the Wikibase data model.
+The importer is suitable for research knowledge graphs, semantic web projects, scientific knowledge bases, and any setup where ontologies must be transformed into the Wikibase data model.
 
-✨ Features
-Class Import & Hierarchy Reconstruction
+## Features
 
-Detects all OWL (owl:Class) and RDFS (rdfs:Class) classes.
+### Class import and hierarchy reconstruction
 
-Creates or reuses Wikibase items for each class.
+- Detects all OWL (`owl:Class`) and RDFS (`rdfs:Class`) classes.
+- Creates or reuses Wikibase items for each class.
+- Anchors `owl:Thing` as the root class.
+- Inserts `subclass_of` statements (e.g. `P18`) to represent the class hierarchy.
 
-Anchors owl:Thing as the root class.
+### Individual import
 
-Inserts subclass_of (P18) statements to express the class hierarchy.
+- Detects all `owl:NamedIndividual` resources.
+- Creates or updates Wikibase items using:
+  - `rdfs:label` / `skos:prefLabel`
+  - `skos:altLabel` aliases
+  - `rdfs:comment` descriptions
+- Adds `instance_of` statements (e.g. `P16`) linking individuals to their OWL classes.
 
-Individual Import
+### Deduplication via ontology IRIs
 
-Detects all owl:NamedIndividual resources.
+Each OWL resource keeps its original IRI via a dedicated Wikibase property, for example:
 
-Creates or updates Wikibase items with:
+- `P17 = ontology_iri`
 
-rdfs:label / skos:prefLabel
+A SPARQL query checks if an item with the same ontology IRI already exists.  
+If yes, the script reuses that QID.  
+If not, it creates a new item and attaches the IRI.
 
-skos:altLabel aliases
+### Property mapping
 
-descriptions (rdfs:comment)
+The importer never auto-creates properties.  
+All properties must exist manually in the Wikibase instance and are mapped explicitly through two configuration layers:
 
-Adds instance_of (P16) statements linking individuals to their OWL classes.
+1. A property ID mapping:
 
-Deduplication via Ontology IRIs
-
-Each OWL resource retains its original IRI via the Wikibase property:
+   ```python
+   PROPS = {
+       "instance_of": "P16",
+       "ontology_iri": "P17",
+       "subclass_of": "P18",
+       "wikidata_uri": "P3",
+       "source": "P2",
+       "orkg_id": "P1",
+       ...
+   }
+PREDICATE_TO_PROPSKEY = {
+    # "has_data_model": "has_data_model",
+    # "has_process": "has_process",
+}
