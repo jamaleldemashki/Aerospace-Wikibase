@@ -191,6 +191,26 @@ The importer returns a Report object summarizing its actions:
 ```
 This helps track how many items and links were created, and lists any warnings (e.g. skipped entities or invalid IRIs).
 
+## Mapping philosophy
+The importer follows a clear OWL -> Wikibase mapping strategy:
+1. Each OWL class and individual is represented as a Wikibase item (QID).
+2. Identity is preserved via the original ontology IRI stored in a dedicated property (e.g. P17 = ontology_iri).
+3. rdfs:subClassOf is mapped to subclass_of (e.g. P18) between class items.
+4. rdf:type is mapped to instance_of (e.g. P16) between individuals and class items.
+5. Labels, descriptions, and aliases from the ontology are preserved as Wikibase labels, descriptions, and aliases.
+6. Object properties are only imported when explicitly mapped in PREDICATE_TO_PROPSKEY.
+This keeps the resulting Wikibase graph structured, interpretable, and closely aligned with the source ontology.
+
+## Troubleshooting
+- Deduplication by ontology IRI does not work. 
+Ensure WB_SPARQL_URL is set in bot.env and that the ontology_iri property (e.g. P17) exists and is configured correctly.
+- You hit rate limits or your Wikibase feels slow
+Increase sleep_between and/or request_timeout in the import_path call.
+- Properties are missing or incorrect
+Double-check the PROPS mapping against your Wikibase property IDs.
+- Labels or descriptions look wrong
+Inspect how your OWL file encodes labels and comments (rdfs:label, skos:prefLabel, rdfs:comment) and adjust the helper functions if needed.
+
 
 
 
