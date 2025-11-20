@@ -60,3 +60,14 @@ All properties must exist manually in the Wikibase instance and are mapped expli
         # "has_process": "has_process",
     }
 Only predicates listed in PREDICATE_TO_PROPSKEY are turned into Wikibase statements.
+
+###Annotation preservation
+For each class or individual, the importer extracts and imports:
+- Labels
+- Description
+- Aliases
+- Wikidata IDs (QID or URL)
+- ORKG IDs
+- Source metadata
+
+Aliases are inserted both as user-visible aliases and as machine-queryable statements.
